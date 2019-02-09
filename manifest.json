@@ -18,6 +18,11 @@
         "default_icon": "icons/icon19.png",
         "default_popup": "src/page_action/page_action.html"
     },
+    "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content.js"]
+    }],
     "permissions": [
         "tabs",
         "http://*/",

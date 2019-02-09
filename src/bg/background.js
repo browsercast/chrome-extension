@@ -10,19 +10,32 @@ function scanTabs(callback) {
         windows.forEach(function(window) {
             // For each tab
             window.tabs.forEach(function(tab) {
-                // Match the domain name
-                var matches = tab.url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-                var domain = matches && matches[1];
-
-                // Only show Youtube tabs
-                if (domain == "www.youtube.com" && tab.url != "https://www.youtube.com/") {
-                    $tabsList.push(tab);
-                }
+                // Check if the tab has a playable video
+                chrome.tabs.sendMessage(tab.id, {cmd : "checkForVideo"}, function(response) {
+                    // If it has, add it to the list
+                    if (parseInt(response) > 0) {
+                        $tabsList.push(tab);
+                    }
+                });
             });
         });
 
-        callback();
+        setTimeout(() => {
+            // Sort tabs
+            $tabsList.sort(compare);
+            // Return callback
+            callback();
+        }, 1000);
     });
+}
+
+// Sort by tab position in browser
+function compare(a,b) {
+  if (a.index < b.index)
+    return -1;
+  if (a.index > b.index)
+    return 1;
+  return 0;
 }
 
 // Check and remove tab
@@ -68,7 +81,16 @@ function changeTab(id) {
 
 // Play video
 function playTab(id) {
-    chrome.tabs.executeScript(id, { code: "document.getElementsByClassName(\"ytp-play-button\")[0].click();" }, null);
+    var code = `
+    var video = document.getElementsByTagName(\"video\")[0];
+    if (video.paused) {
+        video.play();
+    } else {
+        video.pause();
+    }
+    `;
+
+    chrome.tabs.executeScript(id, { code: code }, null);
 }
 
 // Remove tab

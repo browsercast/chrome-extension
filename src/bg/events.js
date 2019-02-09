@@ -1,15 +1,16 @@
 // Check for tab updates such as, page changed, page loaded, audible
 chrome.tabs.onUpdated.addListener(function(tabID, changeInfo, tab) {
-    // Match the domain
-    var matches = tab.url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-    var domain = matches && matches[1];
-
-    if (changeInfo.status == "complete" && domain == "www.youtube.com" && tab.url != "https://www.youtube.com/") {
-        // If page was completely loaded and domain is youtube
-        // Check if tab exists, if not, add it
-        checkAddTab(tab);
-        // Inform the app that a new tab was added
-        sendTabsUpdateMessage();
+    if (changeInfo.status == "complete") {
+        // Check if tab has video
+        chrome.tabs.sendMessage(tab.id, {cmd : "checkForVideo"}, function(response) {
+            // If there is a video
+            if (parseInt(response) > 0) {
+                // Check if tab exists, if not, add it
+                checkAddTab(tab);
+                // Inform the app that a new tab was added
+                sendTabsUpdateMessage();
+            }
+        });
     } else if (changeInfo.audible != null) {
         // If there is a sound change for a tab
         // Inform the app that one of the tabs has changed sound on/off
