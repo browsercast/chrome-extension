@@ -102,3 +102,14 @@ function closeTab(id) {
 function newTab(url) {
     chrome.tabs.create({ url: url });
 }
+
+// Seek video
+function seekVideo(id, seconds) {
+    console.log(id, seconds, "seek")
+    var code = `
+    var video = document.getElementsByTagName(\"video\")[0];
+    video.currentTime += ` + seconds + `;
+    `;
+
+    chrome.tabs.executeScript(id, { code: code }, null);
+}
