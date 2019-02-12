@@ -31,6 +31,10 @@ function actionHandler(data) {
         case "newTab":
             newTab(data.payload.params.url);
             break;
+        // Seek a video
+        case "seekVideo":
+            seekVideo(data.payload.params.id, data.payload.params.seconds);
+            break;
 
         default:
             break;
