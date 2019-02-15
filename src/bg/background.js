@@ -86,14 +86,68 @@ function changeTab(id) {
 // Play video
 function playTab(id) {
     var code = `
-    var video = document.getElementsByTagName(\"video\")[0];
+    var video = document.getElementsByTagName("video")[0];
+
     if (video.paused) {
         video.play();
     } else {
         video.pause();
     }
+
+    if(window.location.hostname == "www.youtube.com"){
+        // YouTube website
+        var ytplayerapi = document.getElementById("player-api");
+        var playercontainer = document.getElementById("player-container");
+    
+        if(playercontainer){
+            var regularhtmlplayer = document.getElementsByClassName('browsercast')[0];
+            var stefanyoutubecontrols = document.getElementsByClassName('ytp-chrome-bottom')[0];
+            if(regularhtmlplayer){
+                playercontainer.classList.remove("browsercast");
+                document.getElementsByTagName('video')[0].classList.remove("browsercast");
+                videowindow = false;
+            } else {
+                if(document.getElementsByTagName('video')[0].paused == false){
+                playercontainer.classList.add('browsercast');
+                document.getElementsByTagName('video')[0].classList.add('browsercast');
+                stefanyoutubecontrols.style.cssText = "width:100% !important";
+                videowindow = true;
+                }
+            }
+        }
+        else if(ytplayerapi){
+            var regularhtmlplayer = document.getElementsByClassName('browsercast')[0];
+            var stefanyoutubecontrols = document.getElementsByClassName('ytp-chrome-bottom')[0];
+            if(regularhtmlplayer){
+                ytplayerapi.classList.remove("browsercast");
+                document.getElementsByTagName('video')[0].classList.remove("browsercast");
+                videowindow = false;
+            } else {
+                if(document.getElementsByTagName('video')[0].paused == false){
+                ytplayerapi.classList.add('browsercast');
+                document.getElementsByTagName('video')[0].classList.add('browsercast');
+                stefanyoutubecontrols.style.width = "98%";
+                videowindow = true;
+                }
+            }
+        }
+    }
     `;
 
+    var css = `
+    .browsercast {
+        position: fixed !important;
+        top: 0px !important;
+        left: 0px !important;
+        right: 0px !important;
+        bottom: 0px !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 50000 !important;
+    }
+    `;
+    
+    chrome.tabs.insertCSS(id, { code: css }, null);
     chrome.tabs.executeScript(id, { code: code }, null);
 }
 
@@ -109,13 +163,12 @@ function newTab(url) {
 
 // Seek video
 function seekVideo(id, seconds) {
-    console.log(id, seconds, "seek")
     var code = `
     var video = document.getElementsByTagName(\"video\")[0];
     video.currentTime += ` + seconds + `;
     `;
 
-    chrome.tabs.executeScript(id, { code: code }, null);
+    chrome.tabs.insertCSS(id, { code: code }, null);
 }
 
 // Initialize Firebase
