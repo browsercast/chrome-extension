@@ -1,7 +1,7 @@
 // Global variables
-$socket = null;
-$remotePeer = null;
-$serverUrl = 'https://browsercast-messaging-broker.herokuapp.com';
+var $socket = null;
+var $remotePeer = null;
+var $serverUrl = 'https://browsercast-messaging-broker.herokuapp.com';
 
 // Trigger the connect for the host
 connect();
@@ -48,12 +48,11 @@ function connect() {
 
     // Trigger when the connection was made
     $socket.on('connect', function(data) {
-        console.log("connected")
+
     });
 
     // Trigger when another user joined
     $socket.on('join', function(data) {
-        console.log("join")
         // Inform server
         $socket.emit("joined-id", data);
 
@@ -63,7 +62,6 @@ function connect() {
 
     // Get the extension's peer id
     $socket.on('peer-id', function(data) {
-        console.log("peer-id", data);
         localStorage.setItem("qrcode", data);
     });
 
@@ -76,8 +74,13 @@ function connect() {
     // Trigger when the app disconnected
     $socket.on('user-disconnected', function(data) {
         // Handle the command
-        console.log("user disconnected")
     });
+}
+
+// Send connected user id
+function sendUserId(id) {
+    // Inform server
+    $socket.emit("joined-id-social", id);
 }
 
 // Send a command to the socket

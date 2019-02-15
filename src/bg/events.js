@@ -31,3 +31,22 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
     // Inform the app that the tab was changed
     sendCurrentTabUpdate(activeInfo.tabId);
 });
+
+setTimeout(() => {
+    // Login status changed
+    firebase.auth().onAuthStateChanged(function(user) {
+        console.log(user, "changed")
+        $user = user;
+
+        // Inform the popup
+        chrome.runtime.sendMessage({
+            cmd: "googleSignin",
+            data: {
+                user: user
+            }
+        });
+
+        // Send to server
+        sendUserId(user.uid);
+    });
+}, 1000);
