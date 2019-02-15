@@ -1,5 +1,9 @@
 // Global variables
 $tabsList = [];
+$user = null;
+
+// Initialize
+initializeFirebase();
 
 // Scan tabs
 function scanTabs(callback) {
@@ -113,3 +117,68 @@ function seekVideo(id, seconds) {
 
     chrome.tabs.executeScript(id, { code: code }, null);
 }
+
+// Initialize Firebase
+function initializeFirebase() {
+    var config = {
+        apiKey: "AIzaSyDn-CWzNRnQM5TvjKMIiho_zwpFivRaBNQ",
+        authDomain: "browsercast-1550137004565.firebaseapp.com",
+        databaseURL: "https://browsercast-1550137004565.firebaseio.com",
+        projectId: "browsercast-1550137004565",
+        storageBucket: "browsercast-1550137004565.appspot.com",
+        messagingSenderId: "209745942759"
+    };
+
+    firebase.initializeApp(config);
+}
+
+// Google sign in
+function googleSignin() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        $user = user;
+        
+        // Inform the popup
+        chrome.runtime.sendMessage({
+            cmd: "googleSignin",
+            data: {
+                user: user
+            }
+        });
+    }).catch(function(error) {
+        console.log(error)
+        return false;
+    });
+}
+
+// Google sign out
+function googleSignout() {
+    firebase.auth().signOut().then(function() {
+        $user = null;
+
+      }).catch(function(error) {
+        // An error happened.
+      });
+}
+
+// Receiving messages from popup
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.cmd == "googleSignin") {
+            if ($user != null) {
+                // Return user
+                sendResponse($user);
+            } else {
+                // Sign in user
+                sendResponse(googleSignin());
+            }
+        } else if (request.cmd == "googleSignout") {
+            googleSignout();
+        }
+    }
+);

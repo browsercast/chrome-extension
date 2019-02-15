@@ -9,6 +9,9 @@
 	.qrcontainer {
 		text-align: center;
 	}
+	.social-login {
+		text-align: right;
+	}
 	
 </style>
 
@@ -17,7 +20,12 @@
 		<h3>Scan code on your app to connect to this PC</h3> 
 		<img class="qrcode" id="qrcode" />
 	</div>
+	<div class="social-login">
+		<span id="socialLoginStatus"></span>
+		<button id="googleSignin">Connect with Google</button>
+	</div>
 </div>
+
 
 <script type="text/javascript" src="../../js/jquery.min.js"></script>
 <script type="text/javascript" src="page_action.js"></script>
