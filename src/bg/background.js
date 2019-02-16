@@ -168,7 +168,17 @@ function seekVideo(id, seconds) {
     video.currentTime += ` + seconds + `;
     `;
 
-    chrome.tabs.insertCSS(id, { code: code }, null);
+    chrome.tabs.executeScript(id, { code: code }, null);
+}
+
+// Seek video
+function changeVolume(id, volume) {
+    var code = `
+    var video = document.getElementsByTagName(\"video\")[0];
+    video.volume = ` + volume + `;
+    `;
+
+    chrome.tabs.executeScript(id, { code: code }, null);
 }
 
 // Initialize Firebase
