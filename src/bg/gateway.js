@@ -35,6 +35,10 @@ function actionHandler(data) {
         case "seekVideo":
             seekVideo(data.payload.params.id, data.payload.params.seconds);
             break;
+        // Change volume
+        case "changeVolume":
+            changeVolume(data.payload.params.id, data.payload.params.volume);
+            break;
 
         default:
             break;
