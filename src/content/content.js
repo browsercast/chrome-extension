@@ -35,8 +35,11 @@ function checkForIframes() {
     for (const key in iframes) {
         if (iframes.hasOwnProperty(key)) {
             const element = iframes[key];
-            if(element.width > 200 && element.height > 200) {
-                finalIframes.push({width: element.width, height: element.height, source: element.src});
+            var width = element.width == "" ? parseInt(element.style.width.replace("px", "")) : element.width;
+            var height = element.height == "" ? parseInt(element.style.height.replace("px", "")) : element.height;
+
+            if(width > 200 && height > 200) {
+                finalIframes.push({width: width, height: height, source: element.src});
             }
         }
     }
