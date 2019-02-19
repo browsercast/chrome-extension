@@ -1,6 +1,6 @@
 {
     "name": "Browser Cast - Phone remote 4 your PC browser",
-    "version": "0.0.0.3",
+    "version": "0.0.0.4",
     "manifest_version": 2,
     "author": "Nikhil Dubbaka",
     "description": "Cast any webpage from your mobile phone to a Chrome browser on your PC. Play/Pause media ont casted webpage like youtube video page.",
