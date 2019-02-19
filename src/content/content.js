@@ -4,7 +4,9 @@ chrome.runtime.onMessage.addListener(function name(request, sender, sendResponse
         case "checkForVideo":
             sendResponse(checkForVideo());
             break;
-    
+        case "checkForIframes":
+            sendResponse({iframes: checkForIframes()});
+            break;
         default:
             break;
     }
@@ -14,7 +16,6 @@ chrome.runtime.onMessage.addListener(function name(request, sender, sendResponse
 // Check if there are any videos in the page
 function checkForVideo() {
     var videoCount = document.getElementsByTagName("video").length;
-    //var iframe = document.getElementsByTagName("iframe")[0];
 
     if (videoCount > 0) {
         // Video found
@@ -24,4 +25,21 @@ function checkForVideo() {
     }
 
     return videoCount;
+}
+
+// Check if there are any iframes in the page
+function checkForIframes() {
+    var iframes = document.getElementsByTagName("iframe");
+    var finalIframes = [];
+    
+    for (const key in iframes) {
+        if (iframes.hasOwnProperty(key)) {
+            const element = iframes[key];
+            if(element.width > 200 && element.height > 200) {
+                finalIframes.push({width: element.width, height: element.height, source: element.src});
+            }
+        }
+    }
+
+    return finalIframes;
 }

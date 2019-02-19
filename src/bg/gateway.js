@@ -96,8 +96,9 @@ function sendCommand(payload) {
 function sendTabsUpdateMessage() {
     // Scan the tabs (update list)
     scanTabs(function() {
+        var tabInfo = getTabsList();
         // Send to the app
-        sendCommand({ cmd: "tabsListUpdate", params: { tabsList: getTabsList() } });
+        sendCommand({ cmd: "tabsListUpdate", params: { tabsList: tabInfo.tabs, iframesList: tabInfo.iframes } });
     });
 }
 
