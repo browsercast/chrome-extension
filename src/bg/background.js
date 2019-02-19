@@ -1,5 +1,6 @@
 // Global variables
 $tabsList = [];
+$iframesList = [];
 $user = null;
 
 // Initialize
@@ -8,6 +9,7 @@ initializeFirebase();
 // Scan tabs
 function scanTabs(callback) {
     $tabsList = [];
+    $iframesList = [];
     // Get the list of all tabs
     chrome.windows.getAll({ populate: true }, function(windows) {
         // For each window
@@ -19,6 +21,18 @@ function scanTabs(callback) {
                     // If it has, add it to the list
                     if (parseInt(response) > 0) {
                         $tabsList.push(tab);
+                    } else {
+                        chrome.tabs.sendMessage(tab.id, {cmd : "checkForIframes"}, function(res) {
+                            // If it has, add it to the list
+                            if (res != undefined) {
+                                for (let i = 0; i < res.iframes.length; i++) {
+                                    const element = res.iframes[i];
+                                    element.tab = tab;
+
+                                    $iframesList.push(element);
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -75,7 +89,7 @@ function checkAddTab(tab) {
 
 // Get the tabs list
 function getTabsList() {
-    return $tabsList;
+    return {tabs: $tabsList, iframes: $iframesList};
 }
 
 // Switch tab
