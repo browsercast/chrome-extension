@@ -11,6 +11,9 @@
 ## Recommended
 * uBlock Origin(Ad blocker): https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm?authuser=0&hl=en-US
 * Poper Blocker(Pop up blocker): https://chrome.google.com/webstore/detail/pop-up-blocker-for-chrome/bkkbcggnhapdmkeljlodobbkopceiche
+### Recommended Android apps
+* https://www.unifiedremote.com/
+* https://play.google.com/store/apps/details?id=com.hsv.freeadblockerbrowser
 
 ## Tested on
 ### Videos
