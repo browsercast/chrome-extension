@@ -1,7 +1,7 @@
 // Global variables
 var $socket = null;
 var $remotePeer = null;
-var $serverUrl = 'https://browsercast-messaging-broker.herokuapp.com';
+var $serverUrl = 'https://browsercast-messaging-broker.herokuapp.com/';
 
 // Trigger the connect for the host
 connect();
@@ -47,6 +47,21 @@ function actionHandler(data) {
 
 // Connect the extension to the socket server
 function connect() {
+    // Get current operating system
+    var osName = "Unknown";
+    if (navigator.userAgent.indexOf("Windows NT 10.0")!= -1) osName="Windows 10";
+    if (navigator.userAgent.indexOf("Windows NT 6.3") != -1) osName="Windows 8.1";
+    if (navigator.userAgent.indexOf("Windows NT 6.2") != -1) osName="Windows 8";
+    if (navigator.userAgent.indexOf("Windows NT 6.1") != -1) osName="Windows 7";
+    if (navigator.userAgent.indexOf("Windows NT 6.0") != -1) osName="Windows Vista";
+    if (navigator.userAgent.indexOf("Windows NT 5.1") != -1) osName="Windows XP";
+    if (navigator.userAgent.indexOf("Windows NT 5.0") != -1) osName="Windows 2000";
+    if (navigator.userAgent.indexOf("Mac")            != -1) osName="Mac";
+    if (navigator.userAgent.indexOf("X11")            != -1) osName="UNIX";
+    if (navigator.userAgent.indexOf("Linux")          != -1) osName="Linux";
+
+    $serverUrl += `?host=${osName}`;
+
     // Open socket
     $socket = io($serverUrl);
 
@@ -81,8 +96,20 @@ function connect() {
     });
 }
 
+// Disconnect from server
+function disconnectSocket() {
+    $socket.close();
+    $socket = null;
+    $remotePeer = null;
+}
+
 // Send connected user id
 function sendUserId(id) {
+    if ($socket == null) {
+        // Connect to socket
+        connect();
+    }
+    
     // Inform server
     $socket.emit("joined-id-social", id);
 }

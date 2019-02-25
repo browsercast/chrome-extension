@@ -237,7 +237,7 @@ function googleSignin() {
 function googleSignout() {
     firebase.auth().signOut().then(function() {
         $user = null;
-
+        disconnectSocket();
       }).catch(function(error) {
         // An error happened.
       });
