@@ -32,21 +32,19 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
     sendCurrentTabUpdate(activeInfo.tabId);
 });
 
-setTimeout(() => {
-    // Login status changed
-    firebase.auth().onAuthStateChanged(function(user) {
-        console.log(user, "changed")
-        $user = user;
+// Login status changed
+firebase.auth().onAuthStateChanged(function(user) {
+    console.log(user, "changed")
+    $user = user;
 
-        // Inform the popup
-        chrome.runtime.sendMessage({
-            cmd: "googleSignin",
-            data: {
-                user: user
-            }
-        });
-
-        // Send to server
-        sendUserId(user.uid);
+    // Inform the popup
+    chrome.runtime.sendMessage({
+        cmd: "googleSignin",
+        data: {
+            user: user
+        }
     });
-}, 1000);
+
+    // Send to server
+    sendUserId(user.uid);
+});
