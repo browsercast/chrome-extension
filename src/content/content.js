@@ -37,8 +37,7 @@ function checkForIframes() {
             const element = iframes[key];
             var width = element.width == "" ? parseInt(element.style.width.replace(/[^0-9.]/g, "")) : element.width.replace(/[^0-9.]/g, "");
             var height = element.height == "" ? parseInt(element.style.height.replace(/[^0-9.]/g, "")) : element.height.replace(/[^0-9.]/g, "");
-            
-            if (width >= 101 && height >= 101 && (element.src.toLowerCase().indexOf("javascript:") === -1)) {
+            if(width >= 100 && height >= 100 && (element.src.toLowerCase().indexOf("javascript:") === -1)) {
                 finalIframes.push({width: width, height: height, source: element.src});
             }
         }

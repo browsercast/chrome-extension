@@ -1,7 +1,7 @@
 // Global variables
 var $socket = null;
 var $remotePeer = null;
-var $serverUrl = 'https://browsercast-messaging-broker.herokuapp.com/';
+var $serverUrl = 'https://video-pc-app.herokuapp.com';
 
 // Trigger the connect for the host
 connect();
