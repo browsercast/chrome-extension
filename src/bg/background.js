@@ -27,7 +27,9 @@ function scanTabs(callback) {
                             if (res != undefined) {
                                 for (let i = 0; i < res.iframes.length; i++) {
                                     const element = res.iframes[i];
-                                    element.tab = tab;
+
+                                    element.tab_id = tab.id;
+                                    element.tab_title = tab.title;
 
                                     $iframesList.push(element);
                                 }
