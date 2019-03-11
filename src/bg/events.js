@@ -11,6 +11,14 @@ chrome.tabs.onUpdated.addListener(function(tabID, changeInfo, tab) {
                 sendTabsUpdateMessage();
             }
         });
+
+        // Check if tabs have iframes
+        chrome.tabs.sendMessage(tab.id, {cmd : "checkForIframes"}, function(res) {
+            // Refresh the tabs
+            if (res != undefined) {
+                sendTabsUpdateMessage();
+            }
+        });
     } else if (changeInfo.audible != null) {
         // If there is a sound change for a tab
         // Inform the app that one of the tabs has changed sound on/off

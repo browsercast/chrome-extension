@@ -1,5 +1,5 @@
 // Received request from background script
-chrome.runtime.onMessage.addListener(function name(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     switch (request.cmd) {
         case "checkForVideo":
             sendResponse(checkForVideo());
